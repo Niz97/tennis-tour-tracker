@@ -1,12 +1,14 @@
 import { config } from "dotenv";
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import Tracker from "./models/Tracker";
 
 config()
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 const connect_string = process.env.MONGO_URI; // TODO::Get this from env
@@ -23,14 +25,12 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.post('/tracker', async (req: Request, res: Response) => {
-  const { name, is_tournament, is_player } = req.body;
+  const name = req.body.name;
   
-  if (is_tournament && is_player) return res.json('Please only select tournament or player. You cannot choose both!');
-
   const tracker = new Tracker({
     name: name,
-    is_tournament: is_tournament,
-    is_player: is_player,
+    is_tournament: true,
+    is_player: false,
   });
 
   const createdTracker = await tracker.save();
