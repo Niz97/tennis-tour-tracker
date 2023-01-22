@@ -1,16 +1,19 @@
+import { config } from "dotenv";
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
-import { config } from "dotenv";
 import Tracker from "./models/Tracker";
 
+config()
 
 const app = express();
 
-const connect_string = "" // TODO::Get this from env
+app.use(express.json());
+
+const connect_string = process.env.MONGO_URI; // TODO::Get this from env
 const PORT = 5000;
 
 mongoose.connect(
-  connect_string
+  connect_string!
   ).then(() => {
     console.log(`Listening on port ${PORT}`);
 });
@@ -20,12 +23,28 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.post('/tracker', async (req: Request, res: Response) => {
-  const newTracker = new Tracker({
-    name: 'My new tracker',
-    is_tournament: false,
-    is_player: true,
+  const { name, is_tournament, is_player } = req.body;
+  
+  if (is_tournament && is_player) return res.json('Please only select tournament or player. You cannot choose both!');
+
+  const tracker = new Tracker({
+    name: name,
+    is_tournament: is_tournament,
+    is_player: is_player,
   });
-  const createdTracker = await newTracker.save();
+
+  const createdTracker = await tracker.save();
+
   res.json(createdTracker);
+
 })
+
+app.get('/tracker', async (req: Request, res: Response) => {
+  
+  const trackers = await  Tracker.find();
+
+  res.json(trackers);
+
+})
+
 app.listen(5000);
