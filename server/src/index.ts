@@ -8,10 +8,12 @@ config()
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+}));
 app.use(express.json());
 
-const connect_string = process.env.MONGO_URI; // TODO::Get this from env
+const connect_string = process.env.MONGO_URI;
 const PORT = 5000;
 
 mongoose.connect(
@@ -20,11 +22,14 @@ mongoose.connect(
     console.log(`Listening on port ${PORT}`);
 });
 
-app.get('/', (req: Request, res: Response) => {
-  res.send("Testing express page...");
+app.get('/trackers', async (req:Request, res:Response) => {
+  const trackers = await Tracker.find();
+
+  res.json(trackers);
 })
 
 app.post('/tracker', async (req: Request, res: Response) => {
+  
   const name = req.body.name;
   
   const tracker = new Tracker({
