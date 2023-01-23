@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import express, { Request, Response } from "express";
+import express, { Request, response, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import Tracker from "./models/Tracker";
@@ -28,7 +28,7 @@ app.get('/trackers', async (req:Request, res:Response) => {
   res.json(trackers);
 })
 
-app.post('/tracker', async (req: Request, res: Response) => {
+app.post('/trackers', async (req: Request, res: Response) => {
   
   const name = req.body.name;
   
@@ -44,12 +44,20 @@ app.post('/tracker', async (req: Request, res: Response) => {
 
 })
 
-app.get('/tracker', async (req: Request, res: Response) => {
+app.get('/trackers', async (req: Request, res: Response) => {
   
   const trackers = await  Tracker.find();
 
   res.json(trackers);
 
+});
+
+app.delete('/trackers/:trackerId', async (req: Request, res: Response) => {
+  const trackerId = req.params.trackerId;
+  const tracker = await Tracker.findByIdAndDelete(trackerId);
+  
+
+  res.json(tracker);
 })
 
 app.listen(5000);

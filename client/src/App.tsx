@@ -12,7 +12,7 @@ function App() {
 
   async function handleCreateTracker(e:React.FormEvent) {
     e.preventDefault();
-    await fetch('http://localhost:5000/tracker', {
+    const response = await fetch('http://localhost:5000/trackers', {
       method:'POST',
       body:JSON.stringify({
         name:name
@@ -21,7 +21,18 @@ function App() {
         "Content-Type": "application/json",
       },
     });
+
+    const tracker = await response.json();
+    setTrackers([...trackers, tracker]);
     setName('');
+  }
+
+  async function handleDeleteTracker(trackerId: string) {
+    await fetch(`http://localhost:5000/trackers/${trackerId}`, {
+      method:'DELETE',
+    });
+
+    setTrackers(trackers.filter(tracker => tracker._id !== trackerId));
   }
 
   useEffect(() => {
@@ -38,7 +49,10 @@ function App() {
       <ul className="trackers">
         {
           trackers.map((tracker) => (
-            <li key={tracker._id}>{tracker.name}</li>
+            <li key={tracker._id}>
+              <button onClick={() => handleDeleteTracker(tracker._id)}>X</button>
+              {tracker.name}
+            </li>
           ))
         }
       </ul>

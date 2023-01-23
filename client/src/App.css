@@ -22,6 +22,7 @@
 }
 
 .trackers li {
+  position: relative;
   display:flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +31,10 @@
   border-radius: 10px;
 }
 
-.trackers li:hover {
-  background:#EEE;
-  cursor: pointer;
+
+.trackers li button {
+  position: absolute;
+  font-size: 10px;
+  top: 0;
+  right: 0;
 }
