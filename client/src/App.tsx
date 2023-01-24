@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
+import { createTracker } from './api/createTracker';
+import { deleteTracker } from './api/deleteTracker';
+import { getTrackers, TTracker } from './api/getTrackers';
 import './App.css'
 
-type TTracker = {
-  name: string;
-  _id: string;
-}
+
 
 function App() {
   const [name, setName] = useState('');
@@ -13,33 +13,21 @@ function App() {
 
   async function handleCreateTracker(e:React.FormEvent) {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/trackers', {
-      method:'POST',
-      body:JSON.stringify({
-        name:name
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const tracker = await response.json();
+    
+    const tracker = await createTracker(name);
     setTrackers([...trackers, tracker]);
     setName('');
   }
 
   async function handleDeleteTracker(trackerId: string) {
-    await fetch(`http://localhost:5000/trackers/${trackerId}`, {
-      method:'DELETE',
-    });
-
+    await deleteTracker(trackerId);
+   
     setTrackers(trackers.filter(tracker => tracker._id !== trackerId));
   }
 
   useEffect(() => {
     async function fetchTrackers() {
-      const response = await fetch("http://localhost:5000/trackers");
-      const newTrackers = await response.json();
+      const newTrackers = await getTrackers();
       setTrackers(newTrackers)
     }
     fetchTrackers();
@@ -73,3 +61,4 @@ function App() {
 }
 
 export default App
+
