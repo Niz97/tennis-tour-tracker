@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from "react-router-dom";
 import './App.css'
 
 type TTracker = {
@@ -51,7 +52,8 @@ function App() {
           trackers.map((tracker) => (
             <li key={tracker._id}>
               <button onClick={() => handleDeleteTracker(tracker._id)}>X</button>
-              {tracker.name}
+              
+              <Link to={`/trackers/${tracker._id}`}>{tracker.name}</Link>
             </li>
           ))
         }
