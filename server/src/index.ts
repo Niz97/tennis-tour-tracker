@@ -2,7 +2,6 @@ import { config } from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { createTracker, deleteTracker, getTrackers } from "./controllers/trackerController";
 import tracker from './routes/trackerRoutes';
 
 config()
@@ -23,7 +22,7 @@ mongoose.connect(
     console.log(`Listening on port ${PORT}`);
 });
 
-app.use('/trackers', tracker);  
+app.use('/trackers', tracker);
 
 
 app.listen(5000);
