@@ -1,13 +1,23 @@
 import { Request, Response } from "express";
 import Tracker from "../models/Tracker";
 
-// Get
+// Get all Trackers
 export async function getTrackers(req: Request, res: Response) {
   
   const trackers = await Tracker.find();
 
   res.json(trackers);
 
+}
+
+// Get single Tracker
+
+export async function getTracker(req: Request, res: Response) {
+  const trackerId = req.params.trackerId;
+
+  const tracker = await Tracker.findById(trackerId);
+
+  res.json(tracker);
 }
 
 // Create

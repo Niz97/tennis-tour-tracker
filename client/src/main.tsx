@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: '/trackers/:trackerId',
     element: <Tracker/>
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
