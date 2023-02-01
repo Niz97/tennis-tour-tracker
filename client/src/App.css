@@ -39,11 +39,7 @@
   right: 0;
 }
 
-div.head-to-head-container {  
-  display: flex;
-  flex-direction: column;
-}
-
-div.score-container {
-  display:flex;
+div.player-container {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
 }
